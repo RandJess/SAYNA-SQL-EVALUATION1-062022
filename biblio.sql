@@ -86,16 +86,8 @@ SELECT DISTINCT nom, prenom FROM adherents, emprunteur WHERE DATEDIFF(dateRet , 
 SELECT DISTINCT titre FROM oeuvres, livres, emprunteur WHERE DATEDIFF(dateRet , dateEmp)>dureeMax AND (oeuvres.NO=livres.NO) AND  (emprunteur.NL=livres.NL) ;
 
 -- ❓19. Quels sont les adhérents en retard, avec le nombre de livres en retard et la moyenne du nombre de jours de retard.
-SELECT DISTINCT nom, prenom ,COUNT(emprunteur.NL) AS titre FROM adherents, emprunteur, livres, oeuvres  WHERE DATEDIFF(dateRet , dateEmp)>dureeMax AND (adherents.NA=emprunteur.NA) GROUP BY nom;
+SELECT nom, COUNT(emprunteur.NL) as nbreLivreRet, AVG(DATEDIFF(dateRet , dateEmp)) AS moyenneRet FROM adherents, oeuvres, livres, emprunteur WHERE oeuvres.NO=livres.NO AND livres.NL=emprunteur.NL AND emprunteur.NA=adherents.NA AND DATEDIFF(dateRet , dateEmp)>dureeMax GROUP BY nom ASC;
 
-
-🏁 SELECT  nom, COUNT(NL) as livreEnRetard, AVG(NL) as nbreJourRetard  FROM adherents, emprunteur WHERE DATEDIFF(dateRet , dateEmp)>dureeMax AND (adherents.NA=emprunteur.NA) GROUP BY nom ;
-SELECT DISTINCT nom,AVG(nom) as nbreJourRetard FROM adherents, emprunteur WHERE DATEDIFF(dateRet , dateEmp)>dureeMax AND (adherents.NA=emprunteur.NA) GROUP BY nom;
-SELECT DISTINCT nom, prenom FROM adherents, emprunteur WHERE DATEDIFF(dateRet , dateEmp)>dureeMax AND (adherents.NA=emprunteur.NA) ;
-
-SELECT AVG(dureeMax) as nbreJourRetard FROM emprunteur WHERE DATEDIFF(dateRet , dateEmp)>dureeMax GROUP BY dureeMax;
---SELECT code_pro, AVG(qte) AS La_Moyen FROM commande; --somme
--- SELECT code_cli, AVG(solde) AS La_Moyenne FROM client; --moyenne
 
 -- ❓20. Nombre de livres empruntés par auteur.
 SELECT auteur, COUNT(emprunteur.NL) as nbreLivreEmp FROM oeuvres, livres, emprunteur WHERE oeuvres.NO=livres.NO AND livres.NL=emprunteur.NL GROUP BY auteur ASC;
@@ -111,7 +103,7 @@ SELECT AVG( DATEDIFF(dateRet, dateEmp) ) AS dureeMoyenneEmp FROM emprunteur WHER
 
 
 -- ❓23. Durée moyenne des retards pour l’ensemble des emprunts.
-SELECT AVG(  DATEDIFF(dateRet, dateEmp) ) AS dureeMoyenneEmp FROM emprunteur WHERE DATEDIFF(dateRet , dateEmp)>dureeMax;
+SELECT AVG(  DATEDIFF(dateRet, dateEmp) ) AS dureeMoyenneEmp FROM emprunteur ;
 
 -- ❓24. Durée moyenne des retards parmi les seuls retardataires
 SELECT AVG(  DATEDIFF(dateRet, dateEmp) ) AS dureeMoyenneEmp FROM emprunteur WHERE DATEDIFF(dateRet , dateEmp)>dureeMax;
